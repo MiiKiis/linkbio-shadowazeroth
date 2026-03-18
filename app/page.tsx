@@ -30,7 +30,7 @@ async function getSettings() {
   try {
     const { data, error } = await sb
       .from('admin_settings')
-      .select('site_name, site_tagline')
+      .select('site_name, site_tagline, avatar_url, server_status, footer_text, background_url, particle_color_1, particle_color_2')
       .eq('id', 1)
       .single();
     if (error) {
