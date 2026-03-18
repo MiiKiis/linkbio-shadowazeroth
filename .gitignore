@@ -1,0 +1,10 @@
+# Entorno local - nunca subir al repositorio
+.env.local
+.env
+
+# Dependencias
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*

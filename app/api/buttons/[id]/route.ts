@@ -1,0 +1,56 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
+import { getSupabase } from '@/lib/supabase';
+import { requireAdmin } from '@/lib/auth';
+
+const sanitizeButton = (body: any) => ({
+  title:      String(body.title     || '').slice(0, 200),
+  subtitle:   String(body.subtitle  || '').slice(0, 300),
+  url:        String(body.url       || '').slice(0, 2000),
+  icon_name:  String(body.icon_name || 'link').slice(0, 50),
+  image_url:  String(body.image_url || '').slice(0, 2000),
+  btn_style:  String(body.btn_style || 'default').slice(0, 50),
+  color:      String(body.color     || '#7b2ff7').slice(0, 20),
+  position:   parseInt(body.position) || 0,
+  is_active:  Boolean(body.is_active),
+  is_primary: Boolean(body.is_primary),
+});
+
+export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+  if (!requireAdmin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  const sb = getSupabase();
+  if (!sb) return NextResponse.json({ error: 'Supabase no disponible' }, { status: 503 });
+  try {
+    const body = await req.json();
+    const { data, error } = await sb
+      .from('buttons')
+      .update(sanitizeButton(body))
+      .eq('id', params.id)
+      .select()
+      .single();
+    if (error) throw error;
+    revalidatePath('/');
+    return NextResponse.json(data);
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  console.log("Servidor: Recibida petición DELETE para ID:", params.id);
+  if (!requireAdmin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+  const sb = getSupabase();
+  if (!sb) return NextResponse.json({ error: 'Supabase no disponible' }, { status: 503 });
+  try {
+    const { error } = await sb
+      .from('buttons')
+      .delete()
+      .eq('id', params.id);
+    if (error) throw error;
+    revalidatePath('/');
+    return NextResponse.json({ ok: true });
+  } catch (e: any) {
+    console.error("Error borrando botón en Supabase:", e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
+}
