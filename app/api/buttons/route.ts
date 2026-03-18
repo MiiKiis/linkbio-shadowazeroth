@@ -24,6 +24,7 @@ export async function GET(req: NextRequest) {
     const { data, error } = await sb
       .from('buttons')
       .select('*')
+      .eq('is_active', true)
       .order('position', { ascending: true });
     if (error) throw error;
     return NextResponse.json(data || []);

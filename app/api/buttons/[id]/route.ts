@@ -37,20 +37,18 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-  console.log("Servidor: Recibida petición DELETE para ID:", params.id);
   if (!requireAdmin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
   const sb = getSupabase();
   if (!sb) return NextResponse.json({ error: 'Supabase no disponible' }, { status: 503 });
   try {
     const { error } = await sb
       .from('buttons')
-      .delete()
+      .update({ is_active: false })
       .eq('id', params.id);
     if (error) throw error;
     revalidatePath('/');
     return NextResponse.json({ ok: true });
   } catch (e: any) {
-    console.error("Error borrando botón en Supabase:", e);
     return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }

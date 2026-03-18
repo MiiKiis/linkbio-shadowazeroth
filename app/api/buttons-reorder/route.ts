@@ -11,7 +11,7 @@ export async function PUT(req: NextRequest) {
     const updates: { id: string; position: number }[] = await req.json();
     await Promise.all(
       updates.map(({ id, position }) =>
-        sb.from('buttons').update({ position }).eq('id', id)
+        sb.from<{ position: number }>('buttons').update({ position }).eq('id', id)
       )
     );
     revalidatePath('/');
