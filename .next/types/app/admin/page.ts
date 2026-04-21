@@ -1,4 +1,4 @@
-// File: D:\azerothcore\landing\app\admin\page.tsx
+// File: D:\trinitycore\linkbio\app\admin\page.tsx
 import * as entry from '../../../../app/admin/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

@@ -1,4 +1,4 @@
-// File: D:\azerothcore\landing\app\api\buttons\route.ts
+// File: D:\trinitycore\linkbio\app\api\buttons\route.ts
 import * as entry from '../../../../../app/api/buttons/route.js'
 import type { NextRequest } from 'next/server.js'
 

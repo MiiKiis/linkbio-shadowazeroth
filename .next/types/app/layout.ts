@@ -1,4 +1,4 @@
-// File: D:\azerothcore\landing\app\layout.tsx
+// File: D:\trinitycore\linkbio\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
